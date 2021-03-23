@@ -1,0 +1,29 @@
+﻿@model Spicy.Models.Category
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<br />
+<h2 class="text-info">Edit Category</h2>
+<form asp-action="Edit" method="post">
+    @Html.HiddenFor(x=>x.Id)
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="backgroundDiv border">
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Name" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+
+        
+        <partial name="_EditAndBackToListButton"  />
+    </div>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

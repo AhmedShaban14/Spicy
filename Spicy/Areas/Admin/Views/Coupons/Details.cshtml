@@ -1,0 +1,57 @@
+﻿@model Coupon
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2 class="text-info">Details Coupons</h2>
+<img src="~/Coupons/@Model.ImageUrl" style="width:100%;height:75px" class="img-thumbnail" />
+<div class="backgroundDiv">
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Name" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="Name" readonly class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="CouponType" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <select asp-for="CouponType" disabled class="form-control" asp-items="@(Html.GetEnumSelectList<Coupon.Couponss>())"></select>
+                <span asp-validation-for="CouponType" class="text-danger"></span>
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Discount" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input type="number" readonly asp-for="Discount" class="form-control" />
+                <span asp-validation-for="Discount" class="text-danger"></span>
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MinimalAmount" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input type="number" readonly asp-for="MinimalAmount" class="form-control" />
+                <span asp-validation-for="MinimalAmount" class="text-danger"></span>
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="IsActice" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input type="checkbox" readonly asp-for="IsActice" class="form-control" />
+            </div>
+        </div>
+        <partial name="_UpdateAndBackToListDetails" model="@Model.Id" />
+</div>  

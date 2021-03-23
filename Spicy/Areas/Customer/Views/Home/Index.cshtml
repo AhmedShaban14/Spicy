@@ -1,0 +1,191 @@
+﻿@model Spicy.Models.ViewModels.HomePageViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+@if (Model.Coupons.Count() > 0)
+{
+    @*<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel" data-interval="2000">
+            <div class="carousel-inner">
+
+                @for (int i = 0; i < Model.Coupons.Count(); i++)
+                {
+                    @if (i == 0)
+                    {
+                        <div class="carousel-item ">
+
+                                <img src="~/Coupons/@Model.Coupons.ToList()[i].ImageUrl" alt="Alternate Text" class="d-block w-100" style="width:100%;height:500px" />
+                                <img src="~/Coupons/@Model.Coupons.ToList()[0].ImageUrl" class="d-block w-100" alt="Alternate Text" style="width:100%;height:500px;" />
+                        </div>
+                    }
+                    else
+                    {
+            <div class="carousel-item active">
+                <img src="~/Coupons/@Model.Coupons.ToList()[0].ImageUrl" class="d-block w-100" alt="Alternate Text" style="width:100%;height:500px;" />
+            </div>
+                    }
+                }
+            </div>
+
+        </div>*@
+    <div class="border row col-12 container">
+        <div class="carousel" data-ride="carousel" data-interval="1000">
+            @for (int i = 0; i < Model.Coupons.Count(); i++)
+            {
+                @if (i == 0)
+                {
+                    <div class="carousel-item active">
+                        <img src="~/Coupons/@Model.Coupons.ToList()[i].ImageUrl" style="width:100%;height:100px;" />
+                    </div>
+                }
+                else
+                {
+                    <div class="carousel-item ">
+                        <img src="~/Coupons/@Model.Coupons.ToList()[i].ImageUrl" style="width:100%;height:100px" />
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="backgroundDiv container">
+
+        <ul class="p-0 menu-list text-center">
+            <li class="active btn btn-secondary" data-filter=".showAll">Show All</li>
+            @foreach (var cat in Model.Categories)
+            {
+                <li data-filter=".@cat.Name.Replace(" ",string.Empty)">@cat.Name</li>
+            }
+        </ul>
+        @foreach (var item in Model.Categories)
+        {
+            var menuItems = Model.MenuItems.Where(x => x.CategoryId == item.Id).ToList();
+
+            <div class="row">
+
+                @if (menuItems.Count() > 0)
+                {
+                    <div class="col-12 showAll @item.Name.Replace(" ",string.Empty)">
+                        <div class="row">
+
+                            <h2 class="text-success">
+                                @item.Name
+                            </h2>
+                        </div>
+                        @foreach (var menu in menuItems)
+                        {
+                            <div class="border border-info rounded col-12" style="margin:15px 0;padding:15px;">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <img src="~/Uploads/@menu.ImageUrl" style="width:99%;height:90%;" />
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <div class="row pr-3">
+                                            <div class="col-8 d-flex">
+                                                <h3 class="text-primary">@menu.Name</h3>
+                                                @if (menu.SpicyTypes == 1)
+                                                {
+                                                    <img src="~/Spicyness/NotSpicy.jpg" style="width:30px;height:30px;margin:2px 15px;" title="Not Spicy" />
+                                                }
+                                                else if (menu.SpicyTypes == 2)
+                                                {
+                                                    <img src="~/Spicyness/Spicy.png" style="width:30px;height:30px;margin:2px 15px;" title="Spicy" />
+                                                }
+                                                else if (menu.SpicyTypes == 3)
+                                                {
+                                                    <img src="~/Spicyness/verySpicys.jpg" style="width:30px;height:30px;margin:2px 15px;" title="Very Spicy" />
+                                                }
+                                            </div>
+                                            <div class="col-4 text-right" style="color:maroon">
+                                                <h3>$ @menu.Price</h3>
+                                            </div>
+                                        </div>
+                                        <div class="row col-12">
+                                            <p>@Html.Raw(@menu.Description)</p>
+
+                                        </div>
+                                        <div class="col-lg-3 offset-lg-9">
+                                            <a asp-area="Customer" asp-controller="Home" asp-action="Details" asp-route-itemId="@menu.Id" class="btn btn-success form-control mt-5">
+                                                Details
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+
+                }
+
+            </div>
+            <div class="p-2"></div>
+
+            @*<div class="col-12">
+                    <h2 class="text-success">
+                        @item.Name
+                    </h2>
+                </div>
+                <div class="row">
+
+                    @foreach (var menu in menuItems)
+                    {
+                        <div class="col-12 border border-info rounded" style="margin:10px 0; padding:20px">
+                            <div class="row">
+                                <div class="col-3">
+                                    <img src="~/Uploads/@menu.ImageUrl" alt="Alternate Text" style="width:100%;height:200px; border-radius:10px;" />
+                                </div>
+                                <div class="col-9">
+                                    <div class="row">
+                                        <div class="col-9">
+                                            <h3>@menu.Name</h3>
+                                        </div>
+                                        <div class="col-2 offset-1">
+                                            <h2>  $ @menu.Price</h2>
+                                        </div>
+                                    </div>
+                                    <div class="col-12" style="height:150px">
+                                        @Html.Raw(menu.Description)
+                                    </div>
+                                    <div class="col-12">
+                                        <a class="btn btn-success">Details</a>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    }
+
+                </div>*@
+        }
+    </div>
+}
+else
+{
+    <p>lalalalal</p>
+}
+
+
+@section Scripts{
+
+    <script>
+
+        $(document).ready(function () {
+            $(".menu-list li").click(function () {
+
+                $(".menu-list li").removeClass("active btn btn-secondary");
+                $(this).addClass("active btn btn-secondary");
+
+                var selectedFilter = $(this).data("filter");
+                $(".showAll").fadeOut();
+                setTimeout(function () {
+                    $(selectedFilter).fadeIn();
+                }, 100)
+
+            })
+        })
+
+    </script>
+}

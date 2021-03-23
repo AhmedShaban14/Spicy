@@ -1,0 +1,52 @@
+﻿@model SubCategory
+@{
+    ViewData["Title"] = "CreateSec";
+}
+
+
+<h2 class="text-info">Create SubSub Category</h2>
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="backgroundDiv">
+        <div class="col-8 border-right">
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="CategoryId" class="col-form-label"></label>
+                </div>
+                <div class="col-5">
+                    <select asp-for="CategoryId" asp-items="@ViewBag.list as SelectList" class="form-control"></select>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="Name" class="col-form-label"></label>
+                </div>
+                <div class="col-5">
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-5 offset-3 row">
+                    <div class="col-6">
+                        <input type="submit" class="btn btn-primary form-control" value="Create" />
+                    </div>
+                    <div class="col-6">
+                        <a asp-action="Index" class="btn btn-success form-control">Back To List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 offset-1">
+
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+

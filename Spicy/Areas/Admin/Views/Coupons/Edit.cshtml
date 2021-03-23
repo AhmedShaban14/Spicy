@@ -1,0 +1,75 @@
+﻿@model Coupon
+@{
+    ViewData["Title"] = "Create";
+}
+<h2 class="text-info">Edit Create Category</h2>
+<div class="backgroundDiv">
+    @if (Model.ImageUrl != null)
+    {
+        <img src="~/Coupons/@Model.ImageUrl" style="width:100%;height:75px;margin-bottom:20px" class="img-thumbnail" />
+    }
+
+    <form id="myForm" asp-action="Edit" method="post" enctype="multipart/form-data">
+        @Html.HiddenFor(x => x.Id)
+        @Html.HiddenFor(x => x.ImageUrl)
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Name" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="ImageUrl" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="File" type="file" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="CouponType" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <select asp-for="CouponType" class="form-control" asp-items="@(Html.GetEnumSelectList<Coupon.Couponss>())"></select>
+                <span asp-validation-for="CouponType" class="text-danger"></span>
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Discount" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input type="number" asp-for="Discount" class="form-control" />
+                <span asp-validation-for="Discount" class="text-danger"></span>
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MinimalAmount" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input type="number" asp-for="MinimalAmount" class="form-control" />
+                <span asp-validation-for="MinimalAmount" class="text-danger"></span>
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="IsActice" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input type="checkbox" asp-for="IsActice" class="form-control" />
+            </div>
+        </div>
+        <partial name="_EditAndBackToListButton" />
+    </form>
+</div>  

@@ -1,0 +1,127 @@
+﻿@model Spicy.Models.ViewModels.MenuItemsViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2 class="text-info">Create Menu Item</h2>
+<div class="alert alert-danger" style="display:none"  id="divErrer">
+    <span id="viewError">
+
+    </span>
+</div>
+<script src="~/ckeditor/ckeditor.js"></script>
+<div class="backgroundDiv">
+    
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MenuItem.Name" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="MenuItem.Name" class="form-control" />
+                <span asp-validation-for="MenuItem.Name" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MenuItem.Description" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <textarea asp-for="MenuItem.Description" class="form-control" id="descId"></textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MenuItem.Price" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="MenuItem.Price" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MenuItem.ImageUrl" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input type="file" id="myImage" asp-for="MenuItem.File" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MenuItem.CategoryId" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <select id="catId" asp-for="MenuItem.CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories,"Id","Name")) ">
+                    <option>Choose Category </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MenuItem.SubCategoryId" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <select id="subId" asp-for="MenuItem.SubCategoryId" class="form-control" asp-items="@(new List<SelectListItem>()) ">
+                    <option>Choose Sub Category </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MenuItem.SpicyTypes" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <select asp-for="MenuItem.SpicyTypes" class="form-control" asp-items="@Html.GetEnumSelectList<MenuItem.Spices>()">
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-5 offset-2 row">
+                <div class="col-6">
+                    <input type="submit" class="btn btn-primary form-control" id="saveBtn" value="Create" />
+                </div>
+                <div class="col-6">
+                    <a asp-action="Index" class="btn btn-success form-control">Back To List</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+
+            $("#catId").change(function () {
+                catId = $(this).val();
+                $.ajax({
+
+                    type: "POST",
+                    url: "/Admin/SubCategories/GetExistingSub/" + catId,
+                    success: function (response) {
+                        $("#subId").empty();
+                        $("#subId").append("<option> Choose Sub Category </option >");
+                        response.forEach(function (entry) {
+                            $("#subId").append("<option value=" + entry.id + ">" + entry.name + "</option>");
+                        });
+                    }
+                })
+            })
+
+            $("#saveBtn").click(function () {
+                var fileName = document.getElementById("myImage").value;
+                var extensionImg = fileName.substr(fileName.lastIndexOf('.') + 1);
+                var arrayOfExtensions = ['png', 'jpg', 'gif'];
+                if ($.inArray(extensionImg, arrayOfExtensions == -1)) {
+                    $("#divErrer").fadeIn(3000);
+                    $("#divErrer").append("CCCCC");
+                }
+            })
+        })
+        CKEDITOR.replace("descId");
+    </script>
+}

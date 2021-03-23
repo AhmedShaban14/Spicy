@@ -1,0 +1,157 @@
+﻿@model Spicy.Models.ViewModels.MenuItemsViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2 class="text-info">Edit Menu Item</h2>
+<div class="alert alert-danger" style="display:none" id="divErrer">
+    <span id="viewError">
+
+    </span>
+</div>
+<script src="~/ckeditor/ckeditor.js"></script>
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+    <div class="backgroundDiv">
+
+        @Html.HiddenFor(x => x.MenuItem.Id)
+        @Html.HiddenFor(x => x.MenuItem.ImageUrl)
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+
+            <div class="col-8">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="MenuItem.Name" class="col-form-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="MenuItem.Name" class="form-control" />
+                        <span asp-validation-for="MenuItem.Name" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="MenuItem.Description" class="col-form-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <textarea asp-for="MenuItem.Description" class="form-control" id="descId"></textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="MenuItem.Price" class="col-form-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="MenuItem.Price" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="MenuItem.ImageUrl" class="col-form-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <input type="file" id="myImage" asp-for="MenuItem.File" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="MenuItem.CategoryId" class="col-form-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <select id="catId" asp-for="MenuItem.CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories,"Id","Name")) ">
+                            <option>Choose Category </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="MenuItem.SubCategoryId" class="col-form-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <select id="subId" asp-for="MenuItem.SubCategoryId" class="form-control" asp-items="@(new SelectList(Model.SubCategories,"Id","Name")) ">
+                            <option>Choose Sub Category </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="MenuItem.SpicyTypes" class="col-form-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <select asp-for="MenuItem.SpicyTypes" class="form-control" asp-items="@Html.GetEnumSelectList<MenuItem.Spices>()">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-8 offset-4 row">
+                        <div class="col-6">
+                            <input type="submit" class="btn btn-primary form-control" id="saveBtn" value="Edit" />
+                        </div>
+                        <div class="col-6">
+                            <a asp-action="Index" class="btn btn-success form-control">Back To List</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 offset-1">
+                <img src="~/Uploads/@Model.MenuItem.ImageUrl" style="width:100%;border-radius:20px" class="img-thumbnail" />
+
+            </div>
+
+        </div>
+    </div>
+
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+
+            $("#catId").change(function () {
+                catId = $(this).val();
+                $.ajax({
+
+                    type: "POST",
+                    url: "/Admin/SubCategories/GetExistingSub/" + catId,
+                    success: function (response) {
+                        $("#subId").empty();
+                        $("#subId").append("<option> Choose Sub Category </option >");
+                        response.forEach(function (entry) {
+                            $("#subId").append("<option value=" + entry.id + ">" + entry.name + "</option>");
+                        });
+                    }
+                })
+            })
+            $("#saveBtn").click(function () {
+                if ($("#myImage").val() != "") {
+                    $("#viewError").empty();
+                    //Check format :
+                    var fileName = document.getElementById("myImage").value;
+                    var extensionImg = fileName.substr(fileName.lastIndexOf('.') + 1);
+                    var arrayOfExtensions = ['png', 'jpg', 'gif'];
+                    if ($.inArray(extensionImg, arrayOfExtensions) == -1) {
+                        $("#divErrer").fadeIn();
+                        $("#viewError").append("Please Choose photo in right format");
+                        return false;
+                    }
+
+                    //Check File Size :
+                    var sizeImage = document.getElementById("myImage").files[0].size / 1024 / 1024;
+                    if (sizeImage > 2) {
+                        $("#divErrer").fadeIn();
+                        $("#viewError").append("Please Choose photo with size < 2M");
+                        return false;
+                    }
+                }
+
+            })
+
+        })
+
+        CKEDITOR.replace("descId");
+    </script>
+}
